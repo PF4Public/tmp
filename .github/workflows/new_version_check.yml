@@ -31,7 +31,7 @@ jobs:
       - name: Create Issue
         # skip it if there's nothing new
         if: steps.check_if_issue_exists.outputs.exists == 'false'
-        uses: JasonEtco/create-an-issue@master
+        uses: JasonEtco/create-an-issue@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.latest-version.outputs.version }}
