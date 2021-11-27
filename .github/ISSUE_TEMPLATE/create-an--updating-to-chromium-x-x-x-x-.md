@@ -1,7 +1,7 @@
 ---
 name: Create an "Updating to Chromium x.x.x.x"
 about: For letting the community track progress to a new stable Chromium
-title: Updating to Chromium [VERSION_HERE]
+title: Updating to Chromium {{ env.VERSION }}
 labels: enhancement, help wanted
 assignees: ''
 
