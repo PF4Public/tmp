@@ -11,6 +11,8 @@ assignees: ''
 
 ## Notes for the developer
 
+Chromium stable channel for Linux has been updated to a newer version: {{ env.VERSION }}.
+
 Once you claim it, it is advisable that you create a [Draft Pull Request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests#draft-pull-requests) for increased visibility:
 
 ![GitHub Interface for creating Draft Pull Requests](https://help.github.com/assets/images/help/pull_requests/pullrequest-send.png)
