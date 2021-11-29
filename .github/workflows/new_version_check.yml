@@ -16,6 +16,7 @@ jobs:
       - name: Get the latest Linux version
         id: latest-version
         run: echo "::set-output name=version::$( curl -s https://omahaproxy.appspot.com/linux )"
+      - uses: actions/checkout@v2
       - name: Create Issue
         uses: JasonEtco/create-an-issue@v2
         env:
