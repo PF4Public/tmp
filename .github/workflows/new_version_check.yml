@@ -18,11 +18,11 @@ jobs:
         run: echo "::set-output name=version::$( curl -s https://omahaproxy.appspot.com/linux )"
       - uses: actions/checkout@v2
       - name: Create Issue
-        uses: JasonEtco/create-an-issue@v2
+        uses: dblock/create-an-issue@fix-all
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.latest-version.outputs.version }}
         with:
-          update_existing: true
-          #search_existing: all
+          update_existing: false
+          search_existing: all
           filename:  .github/ISSUE_TEMPLATE/create-an--updating-to-chromium-x-x-x-x-.md
