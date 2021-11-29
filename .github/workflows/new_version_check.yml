@@ -23,6 +23,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.latest-version.outputs.version }}
         with:
-          update_existing: false
+          update_existing: true
           search_existing: all
           filename:  .github/ISSUE_TEMPLATE/create-an--updating-to-chromium-x-x-x-x-.md
