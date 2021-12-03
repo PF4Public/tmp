@@ -18,7 +18,7 @@ jobs:
         run: echo "::set-output name=version::$( curl -s https://omahaproxy.appspot.com/linux )"
       - uses: actions/checkout@v2
       - name: Create Issue
-        uses: dblock/create-a-github-issue@v3.0
+        uses: dblock/create-a-github-issue@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.latest-version.outputs.version }}
