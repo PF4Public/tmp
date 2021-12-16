@@ -48,9 +48,11 @@ jobs:
         run: |
           echo "${{ steps.latest-version.outputs.version }}" > chromium_version.txt
           set +e
-          sudo ulimit -a
+          ulimit -a
           #sudo ulimit -Sn 65536
-          sudo ulimit -Sp 9999999
+          ulimit -Sp 9999999
+          ulimit -a
+          exit
           mkdir -p build/download_cache
           ./utils/downloads.py retrieve -i downloads.ini -c build/download_cache
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
