@@ -35,13 +35,17 @@ jobs:
           cut -f 1 -d . chromium_version.txt
           echo -n "::set-output name=new::"
           echo "${{ steps.latest-version.outputs.version }}" | cut -f 1 -d .
-      - run: 'echo current: ${{ steps.major.outputs.current }}'
-      - run: 'echo new: ${{ steps.major.outputs.new }}'
+      #- run: 'echo current: ${{ steps.major.outputs.current }}'
+      #- run: 'echo new: ${{ steps.major.outputs.new }}'
+      - name: Install quilt
+        if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
+        run: sudo apt-get install -y quilt
       - name: Try updating
         if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
         id: updating
         run: |
           echo "${{ steps.latest-version.outputs.version }}" > chromium_version.txt
+          set +e
           mkdir -p build/download_cache
           ./utils/downloads.py retrieve -i downloads.ini -c build/download_cache
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
@@ -63,7 +67,7 @@ jobs:
           echo -n "::set-output name=retval::$RETVAL"
           if [ $RETVAL -gt 0 ]; then exit 0; fi;
       - name: Create a PR
-        if: steps.updating.outputs.retval == 0
+        if: contains(steps.create-issue.outputs.status, 'created') && steps.updating.outputs.retval == 0
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: blabla version ${{ steps.latest-version.outputs.version }}
