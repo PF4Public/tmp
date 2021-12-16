@@ -28,7 +28,7 @@ jobs:
           search_existing: all
           filename:  .github/ISSUE_TEMPLATE/create-an--updating-to-chromium-x-x-x-x-.md
       - name: Get Previous tag
-        if: "{{ contains(steps.create-issue.outputs.status, 'created') }}"
+        if: contains(steps.create-issue.outputs.status, 'created')
         id: previoustag
         uses: WyriHaximus/github-action-get-previous-tag@v1
       - name: Minor?
