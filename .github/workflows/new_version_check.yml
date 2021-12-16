@@ -44,13 +44,13 @@ jobs:
       - name: Attempt to automatically update patches and lists
         #if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
         id: updating
-        shell: bash {0}
+        shell: /bin/bash {0}
         run: |
           echo "${{ steps.latest-version.outputs.version }}" > chromium_version.txt
           mkdir -p build/download_cache
           ./utils/downloads.py retrieve -i downloads.ini -c build/download_cache
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
-          sudo -E ./devutils/update_lists.py -t build/src
+          #./devutils/update_lists.py -t build/src
           source devutils/set_quilt_vars.sh
           cd build/src
           sudo -E quilt push -a --refresh -v
