@@ -67,7 +67,7 @@ jobs:
           #echo -n "::set-output name=retval::$RETVAL"
           #if [ $RETVAL -gt 0 ]; then exit 0; fi;
       - name: Create a PR
-        if: contains(steps.create-issue.outputs.status, 'created') && steps.updating.outputs.retval == 0
+        #if: contains(steps.create-issue.outputs.status, 'created') && steps.updating.outputs.retval == 0
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: blabla version ${{ steps.latest-version.outputs.version }}
