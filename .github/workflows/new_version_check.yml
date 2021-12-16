@@ -43,6 +43,7 @@ jobs:
       - name: Try updating
         #if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
         id: updating
+        shell: bash {0}
         run: |
           echo "${{ steps.latest-version.outputs.version }}" > chromium_version.txt
           set +e
@@ -55,20 +56,20 @@ jobs:
           quilt push -a --refresh
           RETVAL=$?
           echo -n "::set-output name=retval::$RETVAL"
-          if [ $RETVAL -gt 0 ]; then exit 0; fi;
+          if [ $RETVAL -gt 0 ]; then echo "quilt push FAILED"; exit 0; fi;
           quilt pop -a
           cd ../..
           cd patches
-          rm -rf *.patch~
+          rm -rf "*.patch~"
           cd ..
           devutils/validate_config.py
-          #RETVAL=$?
-          #echo -n "::set-output name=retval::$RETVAL"
-          #if [ $RETVAL -gt 0 ]; then exit 0; fi;
+          RETVAL=$?
+          echo -n "::set-output name=retval::$RETVAL"
+          if [ $RETVAL -gt 0 ]; then echo "validate_config FAILED"; exit 0; fi;
           devutils/validate_patches.py -l build/src
-          #RETVAL=$?
-          #echo -n "::set-output name=retval::$RETVAL"
-          #if [ $RETVAL -gt 0 ]; then exit 0; fi;
+          RETVAL=$?
+          echo -n "::set-output name=retval::$RETVAL"
+          if [ $RETVAL -gt 0 ]; then echo "validate_patches FAILED"; exit 0; fi;
       - name: Create a PR
         #if: contains(steps.create-issue.outputs.status, 'created') && steps.updating.outputs.retval == 0
         uses: peter-evans/create-pull-request@v3
