@@ -17,34 +17,30 @@ jobs:
         id: latest-version
         run: echo "::set-output name=version::$( curl -s https://omahaproxy.appspot.com/linux )"
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 # Required due to the weg Git works, without it this action won't be able to find any or the correct tags
       - name: Create Issue
         uses: dblock/create-a-github-issue@v3
         id: create-issue
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.latest-version.outputs.version }}
         with:
           update_existing: false
           search_existing: all
           filename:  .github/ISSUE_TEMPLATE/create-an--updating-to-chromium-x-x-x-x-.md
-      - name: Get Previous tag
-        if: contains(steps.create-issue.outputs.status, 'created')
-        id: previoustag
-        uses: WyriHaximus/github-action-get-previous-tag@v1
       - name: Minor?
         if: contains(steps.create-issue.outputs.status, 'created')
         id: major
         run: |
-          echo -n "::set-output name=tag::"
-          echo "{{steps.previoustag.outputs.tag}}" | cut -f 1 -d .
+          echo -n "::set-output name=current::"
+          cut -f 1 -d . chromium_version.txt
           echo -n "::set-output name=new::"
           echo "{{steps.latest-version.outputs.version}}" | cut -f 1 -d .
+      - run: 'echo current: ${{ steps.major.outputs.current }}'
+      - run: 'echo new: ${{ steps.major.outputs.new }}'
       - name: Try updating
-        if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.tag == steps.major.outputs.new
+        if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
         id: updating
         run: |
+          echo "${{ steps.latest-version.outputs.version }}" > chromium_version.txt
           mkdir -p build/download_cache
           ./utils/downloads.py retrieve -i downloads.ini -c build/download_cache
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
@@ -56,6 +52,7 @@ jobs:
           commit-message: blabla version ${{ steps.latest-version.outputs.version }}
           title: blabla version ${{ steps.latest-version.outputs.version }}
           body: "Closes #${{ steps.create-issue.outputs.number }}"
+          labels: update
           delete-branch: true
         
           
