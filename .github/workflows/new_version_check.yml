@@ -10,7 +10,7 @@ on:
 jobs:
   check:
     # do not run in forks
-    if: github.repository == 'PF4Public/ungoogled-chromium'
+    if: github.repository == 'PF4Public/tmp'
     runs-on: ubuntu-latest
     steps:
       - name: Get the latest Linux version
@@ -19,6 +19,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Create Issue
         uses: dblock/create-a-github-issue@v3
+        id: create-issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.latest-version.outputs.version }}
@@ -26,3 +27,32 @@ jobs:
           update_existing: false
           search_existing: all
           filename:  .github/ISSUE_TEMPLATE/create-an--updating-to-chromium-x-x-x-x-.md
+      - name: Get Previous tag
+        if: "{{ contains(steps.create-issue.outputs.status, 'created') }}"
+        id: previoustag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+      - name: Minor?
+        id: major
+        run: |
+          echo -n "::set-output name=tag::"
+          echo "{{steps.previoustag.outputs.tag}}" | cut -f 1 -d .
+          echo -n "::set-output name=new::"
+          echo "{{steps.latest-version.outputs.version}}" | cut -f 1 -d .
+      - name: Try updating
+        if: steps.major.outputs.tag == steps.major.outputs.new
+        id: updating
+        run: |
+          mkdir -p build/download_cache
+          ./utils/downloads.py retrieve -i downloads.ini -c build/download_cache
+          ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
+          ./devutils/update_lists.py -t build/src
+      - name: Create a PR
+        #if: steps.updating.outputs.retval == 0
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: blabla version ${{ steps.latest-version.outputs.version }}
+          title: blabla version ${{ steps.latest-version.outputs.version }}
+          body: "Closes #${{ steps.create-issue.outputs.number }}"
+          delete-branch: true
+        
+          
