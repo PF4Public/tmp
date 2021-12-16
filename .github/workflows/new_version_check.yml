@@ -21,6 +21,7 @@ jobs:
         uses: dblock/create-a-github-issue@v3
         id: create-issue
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.latest-version.outputs.version }}
         with:
           update_existing: false
