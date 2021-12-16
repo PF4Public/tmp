@@ -34,7 +34,7 @@ jobs:
           echo -n "::set-output name=current::"
           cut -f 1 -d . chromium_version.txt
           echo -n "::set-output name=new::"
-          echo "{{steps.latest-version.outputs.version}}" | cut -f 1 -d .
+          echo "${{ steps.latest-version.outputs.version }}" | cut -f 1 -d .
       - run: 'echo current: ${{ steps.major.outputs.current }}'
       - run: 'echo new: ${{ steps.major.outputs.new }}'
       - name: Try updating
