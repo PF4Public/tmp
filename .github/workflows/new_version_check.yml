@@ -13,8 +13,9 @@ jobs:
     if: github.repository == 'PF4Public/tmp'
     runs-on: ubuntu-latest
     steps:
-      #- name: Get the latest Linux version
-      #  id: latest-version
+      - name: Get the latest Linux version
+        id: latest-version
+        run: echo "::set-output name=version::96.0.4664.110"
       #  run: echo "::set-output name=version::$( curl -s https://omahaproxy.appspot.com/linux )"
       - uses: actions/checkout@v2
       #- name: Create Issue
@@ -34,13 +35,12 @@ jobs:
           echo -n "::set-output name=current::"
           cut -f 1 -d . chromium_version.txt
           echo -n "::set-output name=new::"
-          echo "96.0.4664.110" | cut -f 1 -d .
-      #echo "${{ steps.latest-version.outputs.version }}" | cut -f 1 -d .
+          echo "${{ steps.latest-version.outputs.version }}" | cut -f 1 -d .
       #- run: 'echo current: ${{ steps.major.outputs.current }}'
       #- run: 'echo new: ${{ steps.major.outputs.new }}'
       - name: Install quilt
         #if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
-        run: sudo apt-get install -y quilt less
+        run: sudo apt-get install -y quilt
       - name: Try updating
         #if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
         id: updating
@@ -53,6 +53,7 @@ jobs:
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
           ./devutils/update_lists.py -t build/src
           source devutils/set_quilt_vars.sh
+          env
           cd build/src
           quilt push -a --refresh
           export RETVAL=$?
