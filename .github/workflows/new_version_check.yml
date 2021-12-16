@@ -51,9 +51,10 @@ jobs:
           mkdir -p build/download_cache
           ./utils/downloads.py retrieve -i downloads.ini -c build/download_cache
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
-          ./devutils/update_lists.py -t build/src
+          #./devutils/update_lists.py -t build/src
           source devutils/set_quilt_vars.sh
-          env
+          export QUILT_PAGER="less -FRX"
+          #env
           cd build/src
           quilt push -a --refresh
           export RETVAL=$?
