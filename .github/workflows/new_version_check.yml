@@ -41,7 +41,7 @@ jobs:
       - name: Install quilt
         #if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
         run: sudo apt-get install -y quilt
-      - name: Try updating
+      - name: Attempt to automatically update patches and lists
         #if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
         id: updating
         shell: bash {0}
@@ -50,14 +50,14 @@ jobs:
           mkdir -p build/download_cache
           ./utils/downloads.py retrieve -i downloads.ini -c build/download_cache
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
-          ./devutils/update_lists.py -t build/src
+          sudo -E ./devutils/update_lists.py -t build/src
           source devutils/set_quilt_vars.sh
           cd build/src
-          sudo quilt push -a --refresh -v
+          sudo -E quilt push -a --refresh -v
           export RETVAL=$?
           echo -n "::set-output name=retval::$RETVAL"
           if [ $RETVAL -gt 0 ]; then echo "quilt push FAILED"; exit 0; fi;
-          sudo quilt pop -a -v
+          sudo -E quilt pop -a -v
           export RETVAL=$?
           echo -n "::set-output name=retval::$RETVAL"
           if [ $RETVAL -gt 0 ]; then echo "quilt pop FAILED"; exit 0; fi;
