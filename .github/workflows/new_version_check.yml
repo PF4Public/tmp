@@ -47,12 +47,12 @@ jobs:
         shell: bash {0}
         run: |
           echo "${{ steps.latest-version.outputs.version }}" > chromium_version.txt
-          set +e
-          ulimit -a
+          #set +e
+          #ulimit -a
           #sudo ulimit -Sn 65536
-          ulimit -Sp 9999999
-          ulimit -a
-          exit
+          #ulimit -Sp 9999999
+          #ulimit -a
+          #exit
           mkdir -p build/download_cache
           ./utils/downloads.py retrieve -i downloads.ini -c build/download_cache
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
@@ -61,11 +61,11 @@ jobs:
           #export QUILT_PAGER="less -FRX"
           #env
           cd build/src
-          quilt push -a --refresh -v
+          sudo quilt push -a --refresh -v
           export RETVAL=$?
           echo -n "::set-output name=retval::$RETVAL"
           if [ $RETVAL -gt 0 ]; then echo "quilt push FAILED"; exit 0; fi;
-          quilt pop -a -v
+          sudo quilt pop -a -v
           cd ../..
           devutils/validate_config.py
           export RETVAL=$?
