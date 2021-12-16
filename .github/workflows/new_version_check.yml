@@ -1,9 +1,9 @@
 name: New version check
 
 on:
-  # enabling manual trigger
+  # enable manual trigger
   workflow_dispatch:
-  # running every 6 hours
+  # run every 6 hours
   schedule:
     - cron: '48 */6 * * *'
   
@@ -48,6 +48,7 @@ jobs:
         run: |
           echo "${{ steps.latest-version.outputs.version }}" > chromium_version.txt
           set +e
+          sudo ulimit -Sn 65536
           mkdir -p build/download_cache
           ./utils/downloads.py retrieve -i downloads.ini -c build/download_cache
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
