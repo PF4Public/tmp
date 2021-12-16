@@ -17,6 +17,8 @@ jobs:
         id: latest-version
         run: echo "::set-output name=version::$( curl -s https://omahaproxy.appspot.com/linux )"
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Required due to the weg Git works, without it this action won't be able to find any or the correct tags
       - name: Create Issue
         uses: dblock/create-a-github-issue@v3
         id: create-issue
