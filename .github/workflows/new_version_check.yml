@@ -34,6 +34,7 @@ jobs:
         id: previoustag
         uses: WyriHaximus/github-action-get-previous-tag@v1
       - name: Minor?
+        if: contains(steps.create-issue.outputs.status, 'created')
         id: major
         run: |
           echo -n "::set-output name=tag::"
@@ -41,7 +42,7 @@ jobs:
           echo -n "::set-output name=new::"
           echo "{{steps.latest-version.outputs.version}}" | cut -f 1 -d .
       - name: Try updating
-        if: steps.major.outputs.tag == steps.major.outputs.new
+        if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.tag == steps.major.outputs.new
         id: updating
         run: |
           mkdir -p build/download_cache
