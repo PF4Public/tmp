@@ -13,20 +13,20 @@ jobs:
     if: github.repository == 'PF4Public/tmp'
     runs-on: ubuntu-latest
     steps:
-      - name: Get the latest Linux version
-        id: latest-version
-        run: echo "::set-output name=version::$( curl -s https://omahaproxy.appspot.com/linux )"
+      #- name: Get the latest Linux version
+      #  id: latest-version
+      #  run: echo "::set-output name=version::$( curl -s https://omahaproxy.appspot.com/linux )"
       - uses: actions/checkout@v2
-      - name: Create Issue
-        uses: dblock/create-a-github-issue@v3
-        id: create-issue
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ steps.latest-version.outputs.version }}
-        with:
-          update_existing: false
-          search_existing: all
-          filename:  .github/ISSUE_TEMPLATE/create-an--updating-to-chromium-x-x-x-x-.md
+      #- name: Create Issue
+      #  uses: dblock/create-a-github-issue@v3
+      #  id: create-issue
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #    VERSION: ${{ steps.latest-version.outputs.version }}
+      #  with:
+      #    update_existing: false
+      #    search_existing: all
+      #    filename:  .github/ISSUE_TEMPLATE/create-an--updating-to-chromium-x-x-x-x-.md
       - name: Minor?
         #if: contains(steps.create-issue.outputs.status, 'created')
         id: major
@@ -34,12 +34,13 @@ jobs:
           echo -n "::set-output name=current::"
           cut -f 1 -d . chromium_version.txt
           echo -n "::set-output name=new::"
-          echo "${{ steps.latest-version.outputs.version }}" | cut -f 1 -d .
+          echo "96.0.4664.110" | cut -f 1 -d .
+      #echo "${{ steps.latest-version.outputs.version }}" | cut -f 1 -d .
       #- run: 'echo current: ${{ steps.major.outputs.current }}'
       #- run: 'echo new: ${{ steps.major.outputs.new }}'
       - name: Install quilt
         #if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
-        run: sudo apt-get install -y quilt
+        run: sudo apt-get install -y quilt less
       - name: Try updating
         #if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
         id: updating
@@ -54,20 +55,17 @@ jobs:
           source devutils/set_quilt_vars.sh
           cd build/src
           quilt push -a --refresh
-          RETVAL=$?
+          export RETVAL=$?
           echo -n "::set-output name=retval::$RETVAL"
           if [ $RETVAL -gt 0 ]; then echo "quilt push FAILED"; exit 0; fi;
           quilt pop -a
           cd ../..
-          cd patches
-          rm -rf "*.patch~"
-          cd ..
           devutils/validate_config.py
-          RETVAL=$?
+          export RETVAL=$?
           echo -n "::set-output name=retval::$RETVAL"
           if [ $RETVAL -gt 0 ]; then echo "validate_config FAILED"; exit 0; fi;
           devutils/validate_patches.py -l build/src
-          RETVAL=$?
+          export RETVAL=$?
           echo -n "::set-output name=retval::$RETVAL"
           if [ $RETVAL -gt 0 ]; then echo "validate_patches FAILED"; exit 0; fi;
       - name: Create a PR
