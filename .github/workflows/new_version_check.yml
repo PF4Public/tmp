@@ -58,6 +58,9 @@ jobs:
           if [ $RETVAL -gt 0 ]; then exit 0; fi;
           quilt pop -a
           cd ../..
+          cd patches
+          rm -rf *.patch~
+          cd ..
           devutils/validate_config.py
           #RETVAL=$?
           #echo -n "::set-output name=retval::$RETVAL"
