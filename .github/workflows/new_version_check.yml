@@ -28,7 +28,7 @@ jobs:
           search_existing: all
           filename:  .github/ISSUE_TEMPLATE/create-an--updating-to-chromium-x-x-x-x-.md
       - name: Minor?
-        if: contains(steps.create-issue.outputs.status, 'created')
+        #if: contains(steps.create-issue.outputs.status, 'created')
         id: major
         run: |
           echo -n "::set-output name=current::"
@@ -38,10 +38,10 @@ jobs:
       #- run: 'echo current: ${{ steps.major.outputs.current }}'
       #- run: 'echo new: ${{ steps.major.outputs.new }}'
       - name: Install quilt
-        if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
+        #if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
         run: sudo apt-get install -y quilt
       - name: Try updating
-        if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
+        #if: contains(steps.create-issue.outputs.status, 'created') && steps.major.outputs.current == steps.major.outputs.new
         id: updating
         run: |
           echo "${{ steps.latest-version.outputs.version }}" > chromium_version.txt
@@ -59,13 +59,13 @@ jobs:
           quilt pop -a
           cd ../..
           devutils/validate_config.py
-          RETVAL=$?
-          echo -n "::set-output name=retval::$RETVAL"
-          if [ $RETVAL -gt 0 ]; then exit 0; fi;
+          #RETVAL=$?
+          #echo -n "::set-output name=retval::$RETVAL"
+          #if [ $RETVAL -gt 0 ]; then exit 0; fi;
           devutils/validate_patches.py -l build/src
-          RETVAL=$?
-          echo -n "::set-output name=retval::$RETVAL"
-          if [ $RETVAL -gt 0 ]; then exit 0; fi;
+          #RETVAL=$?
+          #echo -n "::set-output name=retval::$RETVAL"
+          #if [ $RETVAL -gt 0 ]; then exit 0; fi;
       - name: Create a PR
         if: contains(steps.create-issue.outputs.status, 'created') && steps.updating.outputs.retval == 0
         uses: peter-evans/create-pull-request@v3
