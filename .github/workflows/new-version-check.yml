@@ -58,7 +58,9 @@ jobs:
           #./devutils/update_lists.py -t build/src
           source devutils/set_quilt_vars.sh
           alias sed=/usr/bin/sed
-          sudo sed -i 's/cat_file \"\$prev_patch_file\" \| patch_header/patch_header "$prev_patch_file"' /usr/share/quilt/refresh
+          sudo sed -i 's/cat_file "$prev_patch_file" | patch_header/patch_header "$prev_patch_file"' /usr/share/quilt/refresh
+          cat /usr/share/quilt/refresh
+          exit 0
           cd build/src
           quilt push -a -v --refresh
           export RETVAL=$?
