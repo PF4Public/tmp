@@ -47,6 +47,10 @@ jobs:
         shell: /bin/bash {0}
         run: |
           echo "${{ steps.latest-version.outputs.version }}" > chromium_version.txt
+          echo "AWK"
+          cat chromium_version.txt | awk '{exit}'
+          echo "true"
+          cat chromium_version.txt | true
           mkdir -p build/download_cache
           ./utils/downloads.py retrieve -i downloads.ini -c build/download_cache
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
