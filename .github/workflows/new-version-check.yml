@@ -52,31 +52,30 @@ jobs:
           cat chromium_version.txt | awk '{exit}'
           echo "true"
           cat chromium_version.txt | true
-          exit 0
           mkdir -p build/download_cache
           ./utils/downloads.py retrieve -i downloads.ini -c build/download_cache
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
-          ./devutils/update_lists.py -t build/src
+          #./devutils/update_lists.py -t build/src
           source devutils/set_quilt_vars.sh
           alias sed=/usr/bin/sed
           cd build/src
-          sudo -E quilt push -a --refresh -v
+          quilt push -a -v --refresh
           export RETVAL=$?
           echo -n "::set-output name=retval::$RETVAL"
-          if [ $RETVAL -gt 0 ]; then echo "quilt push FAILED"; exit 0; fi;
-          sudo -E quilt pop -a -v
+          if [ "$RETVAL" -gt "0" ]; then echo "quilt push FAILED"; exit 0; fi;
+          quilt pop -a -v
           export RETVAL=$?
           echo -n "::set-output name=retval::$RETVAL"
-          if [ $RETVAL -gt 0 ]; then echo "quilt pop FAILED"; exit 0; fi;
+          if [ "$RETVAL" -gt "0" ]; then echo "quilt pop FAILED"; exit 0; fi;
           cd ../..
           devutils/validate_config.py
           export RETVAL=$?
           echo -n "::set-output name=retval::$RETVAL"
-          if [ $RETVAL -gt 0 ]; then echo "validate_config FAILED"; exit 0; fi;
+          if [ "$RETVAL" -gt "0" ]; then echo "validate_config FAILED"; exit 0; fi;
           devutils/validate_patches.py -l build/src
           export RETVAL=$?
           echo -n "::set-output name=retval::$RETVAL"
-          if [ $RETVAL -gt 0 ]; then echo "validate_patches FAILED"; exit 0; fi;
+          if [ "$RETVAL" -gt "0" ]; then echo "validate_patches FAILED"; exit 0; fi;
       - name: Create a PR
         #if: contains(steps.create-issue.outputs.status, 'created') && steps.updating.outputs.retval == 0
         uses: peter-evans/create-pull-request@v3
