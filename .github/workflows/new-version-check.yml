@@ -47,6 +47,8 @@ jobs:
         shell: /bin/bash {0}
         run: |
           echo "${{ steps.latest-version.outputs.version }}" > chromium_version.txt
+          sudo sh -c "ulimit -a"
+          exit 0
           echo "AWK"
           cat chromium_version.txt | awk '{exit}'
           echo "true"
