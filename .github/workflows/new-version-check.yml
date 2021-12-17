@@ -52,6 +52,7 @@ jobs:
           ./utils/downloads.py unpack -i downloads.ini -c build/download_cache build/src
           #./devutils/update_lists.py -t build/src
           source devutils/set_quilt_vars.sh
+          alias sed=/usr/bin/sed
           cd build/src
           sudo -E quilt push -a --refresh -v
           export RETVAL=$?
