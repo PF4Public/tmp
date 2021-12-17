@@ -48,6 +48,7 @@ jobs:
         run: |
           echo "${{ steps.latest-version.outputs.version }}" > chromium_version.txt
           sudo sh -c "ulimit -a"
+          cat /usr/share/quilt/refresh
           exit 0
           echo "AWK"
           cat chromium_version.txt | awk '{exit}'
