@@ -15,7 +15,7 @@ There are a few channels for support:
 * A chat room. There are two options available:
     * [Gitter](https://gitter.im/ungoogled-software/Lobby). It can use your GitHub account as an identity.
     * Matrix.org under name `ungoogled-software/lobby`. It has a bidirectional connection with Gitter. 
-         
+          
 ## Platform-specific Support 
 
 For officially-supported platforms, **please visit their issue trackers before using the issue tracker in this repository**:
