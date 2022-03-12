@@ -10,7 +10,7 @@
 * Read the documentation under [docs/](docs/)
 
 There are a few channels for support:
-
+ 
 * An issue tracker. Issue trackers are the main hubs for discussions and development activity, and thus the primary means of support. They includes problems, suggestions, and questions. If you are using a build for an officially-supported platform ([see the list here](docs/platforms.md)), then please refer to the [Platform-specific Support](#platform-specific-support) section to find its issue tracker. Otherwise, ple ase use [the main issue tracker](//github.com/Eloston/ungoogled-chromium/issues). 
 * A chat room. There are two options available:
     * [Gitter](https://gitter.im/ungoogled-software/Lobby). It can use your GitHub account as an identity.
