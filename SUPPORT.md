@@ -5,7 +5,7 @@
 
 * Read the [FAQ](//ungoogled-software.github.io/ungoogled-chromium-wiki/faq)
 * If you are using a build for an officially-supported platform ([see the list here](docs/platforms.md)), then please refer to the [Platform-specific Support](#platform-specific-support) section first.
-* Check if your feedback already exists in the [Issue Tracker](//github.com/Eloston/ungoogled-chromium/issues) (make sure to search closed issues and use search filters, as applicable) 
+* Check if your f eedback already exists in the [Issue Tracker](//github.com/Eloston/ungoogled-chromium/issues) (make sure to search closed issues and use search filters, as applicable) 
 * If this is a problem, ensure it does *not* occur with regular Chromium or Google Chrome. If it does, then this is *not* a problem with ungoogled-chromium. Instead, please submit your feedback to the [Chromium bug tracker](//bugs.chromium.org/p/chromium/issues/list) or Google.
 * Read the documentation under [docs/](docs/)
 
