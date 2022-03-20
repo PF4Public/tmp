@@ -2,7 +2,7 @@
 
 *A lightweight approach to removing Google web service dependency*
 
-**Help is welcome!** See the [docs/contributing.md](docs/contributing.md) document for more information.
+**Help  is welcome!** See the [docs/contributing.md](docs/contributing.md) document for more information.
 
 ## Objectives
 
